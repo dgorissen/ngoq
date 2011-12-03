@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>NGO Quality System</title>
+		
+		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/ngoq.css">
+		
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load("jquery", "1.6.2", {
+				uncompressed : false
+			});
+			google.load("jqueryui", "1.8.16", {
+				uncompressed : false
+			});
+
+		</script>
+		<script type="text/javascript" src="http://autobahn.tablesorter.com/jquery.tablesorter.min.js"></script>
+		<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.bootstrap.confirm.popover.js"></script>
+		<script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-alerts.min.js"></script>
+		<script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.min.js"></script>
+		<script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.min.js"></script>
+		<script type="text/javascript" src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-twipsy.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/ngoq.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function() { 
+				{% block docready %}
+				{% endblock %}
+			});
+		</script>
+	</head>
+	<body>
+		{% if messages %}
+			{% for message in messages %}
+			<div class="alert-message {{ message.tags }} fade in" data-alert="alert">
+				<a class="close" href="#">×</a>
+				<p>
+					{{message}}
+				</p>
+			</div>
+			{% endfor %}
+		{% endif %}
+
+		{% block topbar %}
+		{% endblock %}
+		
+		{% block container %}
+		{% endblock %}
+
+		{% block footer %}
+			<div class="footer">
+				<footer>
+				<p>
+					-- RHOK Oxford 2011 -- 
+				</p>
+				</footer>
+			</div>
+		{% endblock %}
+	</body>
+</html>
