@@ -1,6 +1,5 @@
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from openpyxl.reader.excel import load_workbook
 import simplejson
 from django.http import HttpResponse
 import csv
@@ -20,7 +19,7 @@ def calc_color(score):
     elif 2 < score < 5:
         color = "orange"
     else:
-        color = "green"
+        color = "lightgreen"
     
     return color
     
@@ -53,15 +52,16 @@ def main(request):
     
     records = load_data()
     
+    recs = []
     for n,rb in rbs.items():
         for rec in records.values():
             score = rb.eval_rules(rec, context=records)
             color = calc_color(score)
             rec[n] = score
-            rec["color"] = color
+            rec["color_" + n] = color
+            recs.append(rec)
             
-    
-    data = {"records":records.values(),
+    data = {"records":sorted(recs,key=lambda x: x["Name"]),
             "rules":rules}
     
     return render_to_response('main.html',data,context_instance=RequestContext(request))

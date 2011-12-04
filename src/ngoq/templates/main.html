@@ -3,18 +3,19 @@
 		{% load getattribute %}
 		{% load score_header %}
 		{% load score_val %}
+		{% load getcolor %}
 		
 	{% block topbar %}
 	    <div class="topbar">
 	      <div class="topbar-inner">
 	        <div class="container-fluid">
-	          <a class="brand" href="#">NGOQ</a>
+	          <a class="brand" href="#">NGO Clarity</a>
 	          <ul class="nav">
 	            <!--li class="active"><a href="#">Home</a></li>
 	            <li><a href="#about">About</a></li>
 	            <li><a href="#contact">Contact</a></li-->
 	          </ul>
-	          <p class="pull-right">Logged in as <a href="#">username</a></p>
+	          <p class="pull-right"><a href="#">RHoK Oxford 2011</a></p>
 	        </div>
 	      </div>
 	    </div>
@@ -25,6 +26,8 @@
 		<div class="container">
 	      <div class="content">
 
+			<h3>Dataset: NGO Partnership website 2011</h3>
+			<hr>
 			<form action="/" method="post">
 				{% csrf_token %}
 				
@@ -85,7 +88,7 @@
 						<td>{{item.City}}</td>
 						<td>{{item.Type}}</td>
 						{% for rs in rules %}
-							<td style="background-color:{{item.color}}">{{item|score_val:rs.name}}</td>
+							<td style="background-color:{{item|getcolor:rs.name}}">{{item|score_val:rs.name}}</td>
 						{% endfor %}
 					</tr>
 				{% endfor %}
