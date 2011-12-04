@@ -28,7 +28,49 @@
 		<script type="text/javascript" src="{{ STATIC_URL }}js/ngoq.js"></script>
 
 		<script type="text/javascript">
-			$(document).ready(function() { 
+			$(document).ready(function() {
+				$.ajaxSetup({
+				error:function(x,e){
+					if(x.status==0){
+						alert('You are offline!!\n Please Check Your Network.');
+					}else if(x.status==404){
+						alert('Requested URL not found.');
+					}else if(x.status==500){
+						alert('Internel Server Error: ' + x.responseText);
+					}else if(e=='parsererror'){
+						alert('Error.\nParsing JSON Request failed.');
+					}else if(e=='timeout'){
+						alert('Request Time out.');
+					}else {
+						alert('Unknow Error.\n'+x.responseText);
+					}
+				},
+			//http://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request
+			beforeSend: function(xhr, settings) {
+	         	function getCookie(name) {
+	             var cookieValue = null;
+	             if (document.cookie && document.cookie != '') {
+	                 var cookies = document.cookie.split(';');
+	                 for (var i = 0; i < cookies.length; i++) {
+	                     var cookie = jQuery.trim(cookies[i]);
+	                     // Does this cookie string begin with the name we want?
+	                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+	                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+	                     break;
+	                 }
+	             }
+	         }
+          	return cookieValue;
+	         }
+	         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+	             // Only send the token to relative URLs i.e. locally.
+	             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+	         }
+	         
+	     }
+	     
+		});
+	     $("#recordTable").tablesorter({});
 				{% block docready %}
 				{% endblock %}
 			});

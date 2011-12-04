@@ -21,8 +21,10 @@ class RuleEntry():
         self.active = active
 
 class RuleBase():
-    def __init__(self):
+    def __init__(self,name="",desc=""):
         self.__rules = {}
+        self.name = name
+        self.desc = desc
     
     def add_rule(self,rule,weight=1):
         self.__rules[rule.name] = RuleEntry(rule,weight)
@@ -62,8 +64,11 @@ def load_class_data():
 
     return class1,class2
 
-def get_rulebase():
-    rb = RuleBase()
+def get_rulebases():
+    rb_avail = RuleBase(name="data_availibility")
+    rb_qual = RuleBase(name="data_quality")
+    rb_agg = RuleBase(name="data_aggregation")
+    rb_std = RuleBase(name="data_std_compliance")
     
     def has_field(name,rec,context=None):
         return (name in rec and len(rec[name]) > 0)
@@ -93,39 +98,39 @@ def get_rulebase():
         
             
     r = Rule("check_phone", partial(has_field,"Phone number"),desc="Is there a phone number")
-    rb.add_rule(r)
+    rb_avail.add_rule(r)
 
     r = Rule("check_address", partial(has_field,"Address"),desc="Is there an address")
-    rb.add_rule(r)
+    rb_avail.add_rule(r)
 
     r = Rule("check_manager", check_manager,desc="Is the manager consistent")
-    rb.add_rule(r)
+    rb_agg.add_rule(r)
 
     r = Rule("check_registered", partial(has_field,"Registered"),desc="Are they registered")
-    rb.add_rule(r)
+    rb_avail.add_rule(r)
     
     r = Rule("check_regno", partial(has_field,"Registration No"),desc="Do they have a registration number")
-    rb.add_rule(r)
+    rb_avail.add_rule(r)
 
     r = Rule("check_cert_exists", partial(has_field,"Registration Certificate URL"),desc="Is there a registration URL")
-    rb.add_rule(r)
+    rb_avail.add_rule(r)
 
     r = Rule("check_cert", check_cert,desc="Is it a valid URL")
-    #rb.add_rule(r)
+    #rb_qual.add_rule(r)
 
     def check_secots(rec,context=None):
         sec = rec.get("Sectors Working In","").split(",")
         return 0 < len(sec) < 5
 
     r = Rule("check_sectors", check_secots,desc="Too many sectors")
-    rb.add_rule(r)
+    rb_qual.add_rule(r)
 
     def check_names(rec,context=None):
         matches = recs_for_field(context, "Name", rec["Name"])
         return 0 if len(matches) > 0 else 1
 
     r = Rule("check_names", check_names,desc="Unique names")
-    rb.add_rule(r)
+    rb_agg.add_rule(r)
 
     def check_regdate(rec,context=None):
         d = rec["Date of Registration"]
@@ -136,7 +141,7 @@ def get_rulebase():
             return 0
 
     r = Rule("check_regdate", check_regdate,desc="Valid registration date")
-    rb.add_rule(r)
+    rb_qual.add_rule(r)
 
     def check_classification(rec,context=None):
         class1,class2 = load_class_data()
@@ -147,7 +152,7 @@ def get_rulebase():
         return len(unks) < 1
         
     r = Rule("check_classification", check_classification,desc="Valid classifications")
-    rb.add_rule(r)
+    rb_std.add_rule(r)
     
     def check_dupe_fields(rec,context=None):
         fields = rec.keys()
@@ -162,9 +167,15 @@ def get_rulebase():
         return 1
         
     r = Rule("check_dupe_fields", check_dupe_fields,desc="Repeated fields")
-    rb.add_rule(r)
+    rb_agg.add_rule(r)
     
-    return rb
+    rulebases = {}
+    rulebases[rb_avail.name] = rb_avail
+    rulebases[rb_agg.name] = rb_agg
+    rulebases[rb_std.name] = rb_std
+    rulebases[rb_qual.name] = rb_qual
+
+    return rulebases 
 
 if __name__ == "__main__":
     print load_class_data()

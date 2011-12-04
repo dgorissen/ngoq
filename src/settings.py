@@ -1,4 +1,6 @@
 # Django settings for ngoq project.
+from ngoq import rules
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -19,6 +21,9 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
+
+RULEBASES = rules.get_rulebases()
+DATADIR = os.path.abspath(os.path.join(os.path.dirname(__file__),"../data"))
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
