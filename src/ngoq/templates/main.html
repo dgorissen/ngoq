@@ -81,7 +81,7 @@
 				{% for item in records %}
 					<tr>
 						{% if item.Id %}
-							<td><a href="/data/{{item.Id|urlencode:""}}">{{item.Name}}</a></td>
+							<td><a href="/data/{{item.Id|urlencode:""}}" rel="popover">{{item.Name}}</a></td>
 						{% else %}
 							<td>{{item.Name}}</td>
 						{% endif %}

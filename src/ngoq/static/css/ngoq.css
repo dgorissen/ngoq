@@ -5,3 +5,11 @@ body {
 thead td {
 	font-weight: bold;
 }
+
+.popover .inner{
+  width:600px;
+}
+
+tr.disabled{
+  opacity:.5;
+}
