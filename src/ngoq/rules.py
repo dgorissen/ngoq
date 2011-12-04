@@ -53,9 +53,9 @@ class RuleBase():
 @lfu_cache()
 def load_class_data():
     class1 = []
-    reader = csv.DictReader(open(os.path.join(settings.DATADIR,"ngoclass1.csv"), "rb"))
-    for row in reader:
-        class1.append(row)
+    #reader = csv.DictReader(open(os.path.join(settings.DATADIR,"ngoclass1.csv"), "rb"))
+    #for row in reader:
+    #   class1.append(row)
 
     class2 = []
     reader = csv.DictReader(open(os.path.join(settings.DATADIR,"ngoclass2.csv"), "rb"))

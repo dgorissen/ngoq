@@ -74,6 +74,12 @@ def get_data_json(request):
     data = load_data()
     return HttpResponse(simplejson.dumps(data))
  
+def locations(request):
+    data = load_data()
+    
+    d = [x["City"] + ",india" for x in data.values()]
+    return HttpResponse(simplejson.dumps(d[1:20]))
+    
 @lfu_cache()
 def load_data():
     data = {}

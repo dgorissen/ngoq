@@ -97,4 +97,88 @@
 	
 	    </div>
     
+    	<hr>
+    
+      <div id="map" style="width: 500px; height: 400px; text-align:center"></div>
+
+  <script type="text/javascript">
+  //This is the entry
+function codeLocations(list, map) {
+  for (var i = 0; i < list.length; i++) {
+
+    var geocoder = new google.maps.Geocoder();
+    var geoOptions = {
+      address: list[i],
+      region: "NO"
+    };
+    geocoder.geocode(geoOptions, createGeocodeCallback(list[i], map));
+  }
+}
+
+function createGeocodeCallback(item, map) {
+  console.log("Generating geocode callback for " + item.location);
+  return function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      console.log("Geocoding " + item.location + " OK");
+      addMarker(map, item, results[0].geometry.location);
+    } else {
+      console.log("Geocode failed " + status);
+    }
+  }
+}
+
+function addMarker(map, item, location) {
+  console.log("Setting marker for " + item.location + " (location: " + location + ")");
+  var marker = new google.maps.Marker({ map : map, position : location});
+  marker.setTitle(item.title);
+  var infowindow = new google.maps.InfoWindow( {
+    content : item.body,
+    size : new google.maps.Size(100, 300)
+  });
+  new google.maps.event.addListener(marker, "click", function() {
+    infowindow.open(map, marker);
+  });
+}
+	$.get("locations",function(data){
+	
+	
+    var locations = [
+      'Mumbai, India',
+      'Calcutta,India',
+      'Munnar,India',
+      'Bangalore, India',
+      'Delhi,India'
+    ];
+
+	//locations = data
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 4,
+      center: new google.maps.LatLng(20.385825,79.892578),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+	codeLocations(locations,map);
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+    
+    	});
+    
+  </script>
+    
 	{% endblock %}
